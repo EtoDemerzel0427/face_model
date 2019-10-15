@@ -11,11 +11,12 @@ def isRotationMatrix(R):
     shouldBeIdentity = np.dot(Rt, R)
     I = np.identity(3, dtype=R.dtype)
     n = np.linalg.norm(I - shouldBeIdentity)
+
     return n < 1e-6
 
 
 def r2e(R):
-    assert (isRotationMatrix(R))
+    # assert (isRotationMatrix(R))
 
     # sy = math.sqrt(R[0, 0] * R[0, 0] + R[1, 0] * R[1, 0])
     sy = math.sqrt(R[0, 0] * R[0, 0] + R[0, 1] * R[0, 1])

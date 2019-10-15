@@ -1,5 +1,6 @@
 import argparse
 from load_all_mat import load_all_mat
+from fitting_model import fitting_model
 import cv2
 import os
 import glob
@@ -14,7 +15,9 @@ ap.add_argument("-p", "--path", type=str, default="./MAT",
 	help="path to the mat files")
 args = vars(ap.parse_args())
 
+print("[Working] Loading data...")
 blendshapes, index_new87, mean_face, cr, single_value, w_exp_initial,  w_id_initial, triangles = load_all_mat(args['path'])
+print("[Finished] Data loaded.")
 
 # down sample the mesh
 faces_load = triangles[:, 2].reshape(-1, 4)  # 2850 x 4
@@ -35,7 +38,7 @@ else:
     pic_names = sorted(glob.glob(os.path.join(root_path, '*.jpg')))
     pt_names = sorted(glob.glob(os.path.join(root_path, '*lds87.txt')))
 
-    first_img = cv2.imread(os.path.join(root_path, pic_names[0]))
+    first_img = cv2.imread(pic_names[0])
     height, width, nchannels = first_img.shape  # 256 x 256 x 3
 
 # Define the codec and create VideoWriter object.The output is stored in 'outpy.avi' file.
@@ -55,6 +58,7 @@ else:
         points[:, 1] = height + 1 - points[:, 1]
 
         # TODO: FittingModel
+        f, theta, t3d, w_id, w_exp = fitting_model(points, cr, single_value, mean_face, indices, w_id_initial, w_exp_initial, img)
 
         # TODO: draw mesh
 
