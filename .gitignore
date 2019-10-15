@@ -1,0 +1,9 @@
+# not include notebooks
+.ipynb_checkpoints
+
+# not include data
+MAT
+
+# not include IDE config
+.idea
+
