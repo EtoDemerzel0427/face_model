@@ -6,17 +6,17 @@ import os
 import glob
 import numpy as np
 
-
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-c", "--camera", type=bool, default=False,
-	help="whether to use the webcam or frame files")
+                help="whether to use the webcam or frame files")
 ap.add_argument("-p", "--path", type=str, default="./MAT",
-	help="path to the mat files")
+                help="path to the mat files")
 args = vars(ap.parse_args())
 
 print("[Working] Loading data...")
-blendshapes, index_new87, mean_face, cr, single_value, w_exp_initial,  w_id_initial, triangles = load_all_mat(args['path'])
+blendshapes, index_new87, mean_face, cr, single_value, w_exp_initial, w_id_initial, triangles = load_all_mat(
+    args['path'], from_npy=True)
 print("[Finished] Data loaded.")
 
 # down sample the mesh
@@ -29,6 +29,7 @@ if args["camera"]:
     # TODO: read frame from video stream
     from imutils.video import VideoStream
     import time
+
     vs = VideoStream(src=0).start()
     time.sleep(2.0)  # allow sensors to warm up
     frame = vs.read()
@@ -58,16 +59,9 @@ else:
         points[:, 1] = height + 1 - points[:, 1]
 
         # TODO: FittingModel
-        f, theta, t3d, w_id, w_exp = fitting_model(points, cr, single_value, mean_face, indices, w_id_initial, w_exp_initial, img)
+        f, theta, t3d, w_id, w_exp = fitting_model(points, cr, single_value, mean_face, indices, w_id_initial,
+                                                   w_exp_initial, img)
 
         # TODO: draw mesh
 
-
-
-
-
-
-
-
-
-
+out.release()

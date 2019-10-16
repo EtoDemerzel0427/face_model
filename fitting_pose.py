@@ -1,6 +1,7 @@
 import numpy as np
 from rotations import r2e
 
+
 def fitting_pose(pt3d, pt2d):
     """
     Solve the linear equation for estimating pose：
@@ -20,17 +21,17 @@ def fitting_pose(pt3d, pt2d):
     transform = np.linalg.inv(pt4d.dot(pt4d.T)).dot(pt4d.dot(pt2d.T)).T
 
     # print(transform.shape)
-    rot = np.vstack((transform[:, :3], np.ones((1,3))))
+    rot = np.vstack((transform[:, :3], np.ones((1, 3))))
     f_xyz = np.linalg.norm(rot, axis=1)
     # print(rot)
-    rot[0,:] = rot[0,:] / f_xyz[0]
-    rot[1,:] = rot[1,:] / f_xyz[1]
-    rot[2,:] = np.cross(rot[0,:], rot[1,:])
+    rot[0, :] = rot[0, :] / f_xyz[0]
+    rot[1, :] = rot[1, :] / f_xyz[1]
+    rot[2, :] = np.cross(rot[0, :], rot[1, :])
     # print(rot)
 
     f = (f_xyz[0] + f_xyz[1]) / 2
     theta = r2e(rot)
-    t3d = np.array([transform[0,3], transform[1,3], 0])
+    t3d = np.array([transform[0, 3], transform[1, 3], 0])
 
     return theta, t3d, f, transform
 

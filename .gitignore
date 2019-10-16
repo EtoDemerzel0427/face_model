@@ -8,3 +8,5 @@ MAT
 .idea
 
 *.avi
+
+*.npz

@@ -6,6 +6,7 @@ The conversion between rotation matrix and Euler Angles.
 
 """
 
+
 def isRotationMatrix(R):
     Rt = np.transpose(R)
     shouldBeIdentity = np.dot(Rt, R)
@@ -61,34 +62,13 @@ def e2r(theta):
     return R
 
 
-# Calculates Rotation Matrix given euler angles.
-def e2r_t(theta):
-    R_x = np.array([[1, 0, 0],
-                    [0, math.cos(theta[0]), -math.sin(theta[0])],
-                    [0, math.sin(theta[0]), math.cos(theta[0])]
-                    ])
-
-    R_y = np.array([[math.cos(theta[1]), 0, math.sin(theta[1])],
-                    [0, 1, 0],
-                    [-math.sin(theta[1]), 0, math.cos(theta[1])]
-                    ])
-
-    R_z = np.array([[math.cos(theta[2]), -math.sin(theta[2]), 0],
-                    [math.sin(theta[2]), math.cos(theta[2]), 0],
-                    [0, 0, 1]
-                    ])
-
-    R = np.dot(R_z, np.dot(R_y, R_x))
-
-    return R
-
 if __name__ == "__main__":
-    print(e2r([np.pi/2, np.pi/3, np.pi/6]))
-    print(e2r_t([np.pi/2, np.pi/3, np.pi/6]))
+    print(e2r([np.pi / 2, np.pi / 3, np.pi / 6]))
+    # print(e2r_t([np.pi/2, np.pi/3, np.pi/6]))
 
-    rot = [[0.4330127,  0.7500000,  0.5000000],
-           [0.2500000,  0.4330127, -0.8660254],
-           [-0.8660254,  0.5000000,  0.0000000]]
+    rot = [[0.4330127, 0.7500000, 0.5000000],
+           [0.2500000, 0.4330127, -0.8660254],
+           [-0.8660254, 0.5000000, 0.0000000]]
 
     print(r2e(np.array(rot).T))
-    print(np.pi/2, np.pi/3, np.pi/6)
+    print(np.pi / 2, np.pi / 3, np.pi / 6)
