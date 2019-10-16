@@ -3,10 +3,12 @@
 
 # not include data
 MAT
+*.npz
 
-# not include IDE config
+# not include config files
 .idea
+.DS_Store
 
 *.avi
 
-*.npz
+
