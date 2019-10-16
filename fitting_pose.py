@@ -12,10 +12,13 @@ def fitting_pose(pt3d, pt2d):
     theta: 3 Euler angles of the rotation. Under this rotation，
     the projection is an orthographic, so that we can just remove the last colomun
     of the 3D coordinates.
-    f:
-    t3d:
+    f: A scalar, should be something like scale.
+    t3d: A (3,) np array.
     transform:
     """
+    assert pt3d.shape[0] == 3
+    assert pt2d.shape[0] == 2
+
     pt4d = np.vstack((pt3d, np.ones((1, pt3d.shape[1]))))
     # TODO: here transform is solved by closed form, using optimization method should be better.
     transform = np.linalg.inv(pt4d.dot(pt4d.T)).dot(pt4d.dot(pt2d.T)).T

@@ -19,6 +19,7 @@ blendshapes, index_new87, mean_face, cr, single_value, w_exp_initial, w_id_initi
     args['path'], from_npy=True)
 print("[Finished] Data loaded.")
 
+
 # down sample the mesh
 faces_load = triangles[:, 2].reshape(-1, 4)  # 2850 x 4
 indices = index_new87.T  # 1 x 87
