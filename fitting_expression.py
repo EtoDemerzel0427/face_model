@@ -9,11 +9,12 @@ def fitting_expression(id3d, pt2d, rot, t3d, f, w_exp):
     :param rot: 3 x 3 Rotation matrix from pose estimation.
     :param t3d: （3,) np array. Estimated via fitting_pose.
     :param f: A scalar. Estimated via fitting_pose.
-    :param w_exp: The initial values for optimization.
+    :param w_exp: 50 x 1 np array. The initial values for optimization.
     :return: the optimized w_exp.
     """
     w_exp.flatten()
-    id3d = id3d.T.reshape(pt2d.shape[0], 3, -1).transpose(1, 2, 0)   # 3 x 87 x 47
+    id3d = id3d.T.reshape(-1, pt2d.shape[0], 3).transpose(2, 1, 0)   # 3 x 87 x 47
+    print('id3d.shape:', id3d.shape)
     weight2d = f * np.tensordot(rot, id3d, axes=(1, 0))[:2, :, :]  # 2 x 87 x 47
     weight2d = weight2d.reshape(-1, 47)  # 174 x 47
 
