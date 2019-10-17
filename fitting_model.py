@@ -5,7 +5,7 @@ from fitting_shape import fitting_shape
 from rotations import e2r
 
 
-def fitting_model(pt2d, cr, single_value, mu, keypoints, w_id_initial, w_exp_initial, img):
+def fitting_model(pt2d, cr, single_value, mu, keypoints, w_id_initial, w_exp_initial):
     """
 
     :param pt2d: 87 x 2 array. Landmarks of current photo/frame.
@@ -15,7 +15,6 @@ def fitting_model(pt2d, cr, single_value, mu, keypoints, w_id_initial, w_exp_ini
     :param keypoints: 1 x 87 array. The indices of 87 landmarks.
     :param w_id_initial: 47 x 1 array. Initial values for identity parameters.
     :param w_exp_initial: 50 x 1 array. Initial values for expression parameters.
-    :param img: The current image/frame.
     :return:
     :w_id: the learned parameters of identities.
     :w_exp: the learned parameters of expressions.
@@ -39,7 +38,7 @@ def fitting_model(pt2d, cr, single_value, mu, keypoints, w_id_initial, w_exp_ini
     keys = keys.flatten()
     cr = cr[keys, :, :]  # 261 x 50 x 47
 
-    theta, t3d, f = None, None, None
+    rot, t3d, f = None, None, None
     for i in range(5):
         tmp = np.tensordot(cr, w_id, axes=(1,0))  # 261 x 47 x 1
         pt3d = np.tensordot(tmp, w_exp, axes=(1,0)).reshape(3, -1)  # 261 x 1 x 1 ===> 3 x 87
@@ -59,4 +58,4 @@ def fitting_model(pt2d, cr, single_value, mu, keypoints, w_id_initial, w_exp_ini
         # print('[cur_res] w_id: ', w_id)
         # print('[cur_res] w_exp: ', w_exp)
 
-    return f, theta, t3d, w_id, w_exp
+    return f, rot, t3d, w_id, w_exp

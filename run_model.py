@@ -59,9 +59,9 @@ else:
 
         points[:, 1] = height + 1 - points[:, 1]
 
-        # TODO: FittingModel
-        f, theta, t3d, w_id, w_exp = fitting_model(points, cr, single_value, mean_face, indices, w_id_initial,
-                                                   w_exp_initial, img)
+        # 1. learn identity and expression coefficients
+        f, rot, t3d, w_id, w_exp = fitting_model(points, cr, single_value, mean_face, indices, w_id_initial,
+                                                   w_exp_initial)
 
         # TODO: draw mesh. Have found a demo on Github: https://github.com/cleardusk/3DDFA
 
