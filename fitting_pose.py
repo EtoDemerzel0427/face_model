@@ -14,8 +14,8 @@ def fitting_pose(pt3d, pt2d):
     of the 3D coordinates.
     f: A scalar, should be something like scale.
     t3d: A (3,) np array.
-    transform:
     """
+
     assert pt3d.shape[0] == 3
     assert pt2d.shape[0] == 2
 
@@ -36,7 +36,7 @@ def fitting_pose(pt3d, pt2d):
     theta = r2e(rot)
     t3d = np.array([transform[0, 3], transform[1, 3], 0])
 
-    return theta, t3d, f, transform
+    return theta, t3d, f
 
 
 if __name__ == "__main__":

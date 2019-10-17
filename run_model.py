@@ -45,10 +45,10 @@ else:
 
 # Define the codec and create VideoWriter object.The output is stored in 'outpy.avi' file.
 # Define the fps to be equal to 5 if use camera, 30 if not. Also frame size is passed.
-if args['camera']:
-    out = cv2.VideoWriter('outpy.avi', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 5, (width, height))
-else:
-    out = cv2.VideoWriter('outpy.avi', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 30, (width, height))
+# if args['camera']:
+#     out = cv2.VideoWriter('outpy.avi', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 5, (width, height))
+# else:
+#     out = cv2.VideoWriter('outpy.avi', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 30, (width, height))
 
 if args['camera']:
     pass
@@ -63,6 +63,8 @@ else:
         f, theta, t3d, w_id, w_exp = fitting_model(points, cr, single_value, mean_face, indices, w_id_initial,
                                                    w_exp_initial, img)
 
-        # TODO: draw mesh
+        # TODO: draw mesh. Have found a demo on Github: https://github.com/cleardusk/3DDFA
 
-out.release()
+
+
+# out.release()

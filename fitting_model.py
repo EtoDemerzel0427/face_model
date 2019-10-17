@@ -1,6 +1,7 @@
 import numpy as np
 from fitting_pose import fitting_pose
 from fitting_expression import fitting_expression
+from fitting_shape import fitting_shape
 from rotations import e2r
 
 
@@ -19,6 +20,7 @@ def fitting_model(pt2d, cr, single_value, mu, keypoints, w_id_initial, w_exp_ini
     :w_id: the learned parameters of identities.
     :w_exp: the learned parameters of expressions.
     """
+
     # inner_landmarks = list(range(87))
     w_id, w_exp = w_id_initial, w_exp_initial
 
@@ -43,21 +45,18 @@ def fitting_model(pt2d, cr, single_value, mu, keypoints, w_id_initial, w_exp_ini
         pt3d = np.tensordot(tmp, w_exp, axes=(1,0)).reshape(3, -1)  # 261 x 1 x 1 ===> 3 x 87
 
         # 1. pose estimation
-        theta, t3d, f, transform = fitting_pose(pt3d, pt2d.T)
+        theta, t3d, f = fitting_pose(pt3d, pt2d.T)
         rot = e2r(theta)
 
         # 2. expression estimation
         id3d = np.tensordot(cr, w_id, axes=(1,0)).squeeze()  # 261 x 47
-        w_exp = fitting_expression(id3d, pt2d, rot, t3d, f, w_exp).reshape(-1, 1)
+        w_exp = fitting_expression(id3d, pt2d, rot, t3d, f, w_exp).reshape(-1, 1)  # 47 x 1
 
         # 3. shape estimation
-        # TODO： add shape estimation
+        exp3d = np.tensordot(cr, w_exp, axes=(2, 0)).squeeze()  # 261 x 50
+        w_id = fitting_shape(exp3d, pt2d, rot, t3d, f, w_id, single_value)
 
-
-
-        print('[cur_res] w_id: ', w_id)
-        print('[cur_res] w_exp: ', w_exp)
-
-
+        # print('[cur_res] w_id: ', w_id)
+        # print('[cur_res] w_exp: ', w_exp)
 
     return f, theta, t3d, w_id, w_exp
