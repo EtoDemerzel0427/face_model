@@ -23,9 +23,10 @@ print("[Finished] Data loaded.")
 # down sample the mesh
 faces_load = triangles[:, 2].reshape(-1, 4)  # 2850 x 4
 indices = index_new87.T  # 1 x 87
+indices = indices - 1  # IMPORTANT: convert MATLAB 1-based index to python 0-based index
 
 pic_names, pt_names = None, None
-height, width, nchannels = None, None, None
+height = None
 if args["camera"]:
     # TODO: read frame from video stream
     from imutils.video import VideoStream
@@ -62,6 +63,22 @@ else:
         # 1. learn identity and expression coefficients
         f, rot, t3d, w_id, w_exp = fitting_model(points, cr, single_value, mean_face, indices, w_id_initial,
                                                    w_exp_initial)
+
+        # 2. predict 3d mesh for new img
+        print('f ', f)
+        print('rot ', rot)
+        print('t3d ', t3d)
+        print('w_id ', w_id)
+        print('w_exp ', w_exp)
+        predicted = np.tensordot(cr, w_exp, axes=(2, 0)).squeeze()
+        assert predicted.shape == (34530, 50)
+        predicted = np.dot(predicted, w_id).reshape(-1, 3)
+        test_num = np.sum(predicted[:, 2] > 0)
+        print('The face vertices number is :', test_num)
+
+        break
+
+
 
         # TODO: draw mesh. Have found a demo on Github: https://github.com/cleardusk/3DDFA
 
