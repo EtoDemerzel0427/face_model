@@ -21,7 +21,9 @@ def fitting_pose(pt3d, pt2d):
 
     pt4d = np.vstack((pt3d, np.ones((1, pt3d.shape[1]))))
     # TODO: here transform is solved by closed form, using optimization method should be better.
-    transform = np.linalg.inv(pt4d.dot(pt4d.T)).dot(pt4d.dot(pt2d.T)).T
+    # transform = np.linalg.inv(pt4d.dot(pt4d.T)).dot(pt4d.dot(pt2d.T)).T
+    transform = np.linalg.solve(pt4d.dot(pt4d.T), pt4d.dot(pt2d.T))
+    transform = transform.T  # 2 x 4
 
     # print(transform.shape)
     rot = np.vstack((transform[:, :3], np.ones((1, 3))))
