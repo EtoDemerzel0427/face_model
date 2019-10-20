@@ -54,17 +54,20 @@ else:
 if args['camera']:
     pass
 else:
-    for i in range(1, len(pic_names)):
+    for i in range(len(pic_names)):
         img = cv2.imread(pic_names[i])
+        # print(pic_names[i])
         points = np.loadtxt(pt_names[i], delimiter=',')  # 87 x 2
 
         points[:, 1] = height + 1 - points[:, 1]
 
         # 1. learn identity and expression coefficients
-        f, rot, t3d, w_id, w_exp = fitting_model(points, cr, single_value, mean_face, indices, w_id_initial,
+        f, rot, t3d, w_id, w_exp = fitting_model(points, cr, single_value, indices, w_id_initial,
                                                    w_exp_initial)
 
         # 2. predict 3d mesh for new img
+        print(f'-------[case {i}]---------')
+        print(pic_names[i])
         print('f ', f)
         print('rot ', rot)
         print('t3d ', t3d)
@@ -75,6 +78,7 @@ else:
         predicted = np.dot(predicted, w_id).reshape(-1, 3)
         test_num = np.sum(predicted[:, 2] > 0)
         print('The face vertices number is :', test_num)
+
 
         break
 
