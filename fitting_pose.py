@@ -9,7 +9,7 @@ def fitting_pose(pt3d, pt2d):
     :param pt3d: 3 x 87 array. The 3D coordinates of landmarks.
     :param pt2d: 2 x 87 array. The correspondence 2D coordinates of landmarks.
     :return:
-    theta: 3 Euler angles of the rotation. Under this rotation，
+    rot: The rotation matrix.
     the projection is an orthographic, so that we can just remove the last colomun
     of the 3D coordinates.
     f: A scalar, should be something like scale.
@@ -35,10 +35,10 @@ def fitting_pose(pt3d, pt2d):
     # print(rot)
 
     f = (f_xyz[0] + f_xyz[1]) / 2
-    theta = r2e(rot)
+    # theta = r2e(rot)
     t3d = np.array([transform[0, 3], transform[1, 3], 0])
 
-    return theta, t3d, f
+    return rot, t3d, f
 
 
 if __name__ == "__main__":
