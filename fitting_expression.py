@@ -20,13 +20,13 @@ def fitting_expression(id3d, pt2d, rot, t3d, f, w_exp):
     assert np.linalg.norm(test_a - test_b) < 1e-6   # test if reshaping is correct
 
     weight2d = f * np.tensordot(rot, id3d, axes=(1, 0))[:2, :, :]  # 2 x 87 x 47
-    weight2d = weight2d.reshape(-1, 47)  # 174 x 47
+    weight2d = weight2d.swapaxes(0,1).reshape(-1, 47)  # 174 x 47
 
     mean_weight = weight2d[:, 0]  # (174,)
     weight = weight2d[:, 1:]  # 174 x 46
 
     t2d = np.tile(t3d[:2], pt2d.shape[0]).flatten()  # (174,)
-    pt2d = pt2d.T.flatten()  # 174 x 1
+    pt2d = pt2d.flatten()  # 174 x 1
 
     # x should be (46,) , the expression parameters w/o the mean expression(always 1).
     # quadratic problem with L1 norm.

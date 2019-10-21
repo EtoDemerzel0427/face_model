@@ -35,10 +35,11 @@ def fitting_pose(pt3d, pt2d):
     # print(rot)
 
     f = (f_xyz[0] + f_xyz[1]) / 2
-    # theta = r2e(rot)
+    theta = r2e(rot)   # TODO: this line will be commented.
     t3d = np.array([transform[0, 3], transform[1, 3], 0])
 
-    return rot, t3d, f
+    #return rot, t3d, f
+    return theta, t3d, f
 
 
 if __name__ == "__main__":

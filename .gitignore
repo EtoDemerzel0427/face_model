@@ -4,11 +4,13 @@
 # not include data
 MAT
 *.npz
+*.npy
 
 # not include config files
 .idea
 .DS_Store
 
 *.avi
+
 
 
