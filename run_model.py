@@ -66,26 +66,36 @@ else:
                                                    w_exp_initial)
 
         # 2. predict 3d mesh for new img
-        print(f'-------[case {i}]---------')
-        print(pic_names[i])
-        print('f ', f)
-        print('rot ', rot)
-        print('t3d ', t3d)
-        print('w_id ', w_id)
-        print('w_exp ', w_exp)
-        predicted = np.tensordot(cr, w_exp, axes=(2, 0)).squeeze()
-        assert predicted.shape == (34530, 50)
-        predicted = np.dot(predicted, w_id).reshape(-1, 3)
-        test_num = np.sum(predicted[:, 2] > 0)
-        print('The face vertices number is :', test_num)
+        pt3d_predict = np.tensordot(cr, w_exp, axes=(2, 0)).squeeze()  # 34530 x 50, apply expression
+        pt3d_predict = np.tensordot(pt3d_predict, w_id, axes=(1, 0)).reshape(-1, 3).T   # 3 x 11510, apply shape
+        pt3d_predict = f * np.tensordot(rot, pt3d_predict, axes=(1,0)).T  # 11510 x 3, apply pose
 
 
-        break
-
+        # print(f'-------[case {i}]---------')
+        # print(pic_names[i])
+        # print('f ', f)
+        # print('rot ', rot)
+        # print('t3d ', t3d)
+        # print('w_id ', w_id)
+        # print('w_exp ', w_exp)
+        # predicted = np.tensordot(cr, w_exp, axes=(2, 0)).squeeze()
+        # assert predicted.shape == (34530, 50)
+        # predicted = np.dot(predicted, w_id).reshape(-1, 3)
+        # test_num = np.sum(predicted[:, 2] > 0)
+        # print('The face vertices number is :', test_num)
 
 
         # TODO: draw mesh. Have found a demo on Github: https://github.com/cleardusk/3DDFA
+        index = np.where(pt3d_predict[:, 2] > -10)[0]
+        vertices = pt3d_predict[index, :]
 
+
+        # import imageio
+        # imageio.imwrite('test.jpg', img_render)
+        np.save('vertices', vertices)
+        np.save('faces', faces_load)
+
+        break
 
 
 # out.release()

@@ -37,8 +37,8 @@ def fitting_model(pt2d, cr, single_value, keypoints, w_id_initial, w_exp_initial
 
         # 1. pose estimation
         rot, t3d, f = fitting_pose(pt3d, pt2d.T)
-        theta, t3d, f = fitting_pose(pt3d, pt2d.T)
-        rot = e2r(theta)
+        # theta, t3d, f = fitting_pose(pt3d, pt2d.T)
+        # rot = e2r(theta)
 
         # 2. expression estimation
         id3d = np.tensordot(key_cr, w_id, axes=(1,0)).squeeze()  # 261 x 47
