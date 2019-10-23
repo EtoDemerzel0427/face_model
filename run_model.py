@@ -66,9 +66,14 @@ else:
                                                    w_exp_initial)
 
         # 2. predict 3d mesh for new img
+        print('f', f)
         pt3d_predict = np.tensordot(cr, w_exp, axes=(2, 0)).squeeze()  # 34530 x 50, apply expression
         pt3d_predict = np.tensordot(pt3d_predict, w_id, axes=(1, 0)).reshape(-1, 3).T   # 3 x 11510, apply shape
-        pt3d_predict = f * np.tensordot(rot, pt3d_predict, axes=(1,0)).T  # 11510 x 3, apply pose
+
+        # pt3d_predict = f * np.tensordot(rot, pt3d_predict, axes=(1,0)).T  # 11510 x 3, apply pose
+        pt3d_predict = f * np.dot(rot, pt3d_predict).T + np.tile(np.reshape(t3d, (1, -1)), (pt3d_predict.shape[1], 1))
+        print(pt3d_predict[:6,:])
+
 
 
         # print(f'-------[case {i}]---------')
@@ -88,12 +93,11 @@ else:
         # TODO: draw mesh. Have found a demo on Github: https://github.com/cleardusk/3DDFA
         index = np.where(pt3d_predict[:, 2] > -10)[0]
         vertices = pt3d_predict[index, :]
+        print('number of vertices:', len(index))
 
 
-        # import imageio
-        # imageio.imwrite('test.jpg', img_render)
-        np.save('vertices', vertices)
-        np.save('faces', faces_load)
+        # np.save('vertices', vertices)
+        # np.save('faces', faces_load)
 
         break
 

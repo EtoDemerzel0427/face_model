@@ -9,6 +9,7 @@ MAT
 # not include config files
 .idea
 .DS_Store
+__pycache__
 
 *.avi
 
