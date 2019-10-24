@@ -1,6 +1,7 @@
 import argparse
 from load_all_mat import load_all_mat
 from fitting_model import fitting_model
+from visualize import visualize
 import cv2
 import os
 import glob
@@ -40,6 +41,7 @@ else:
     root_path = '../face_test/probes'
     pic_names = sorted(glob.glob(os.path.join(root_path, '*.jpg')))
     pt_names = sorted(glob.glob(os.path.join(root_path, '*lds87.txt')))
+    print(f'[Counted] Total pic number is {len(pic_names)}')
 
     first_img = cv2.imread(pic_names[0])
     height, width, nchannels = first_img.shape  # 256 x 256 x 3
@@ -51,12 +53,18 @@ else:
 # else:
 #     out = cv2.VideoWriter('outpy.avi', cv2.VideoWriter_fourcc('M', 'J', 'P', 'G'), 30, (width, height))
 
+wd = 'render_res'
+if not os.path.exists(wd):
+    os.mkdir(wd)
+
 if args['camera']:
     pass
 else:
     for i in range(len(pic_names)):
-        img = cv2.imread(pic_names[i])
+        # img = cv2.imread(pic_names[i])
         # print(pic_names[i])
+
+        print(f'[Processing] pic number {i+1}...')
         points = np.loadtxt(pt_names[i], delimiter=',')  # 87 x 2
 
         points[:, 1] = height + 1 - points[:, 1]
@@ -66,40 +74,15 @@ else:
                                                    w_exp_initial)
 
         # 2. predict 3d mesh for new img
-        print('f', f)
         pt3d_predict = np.tensordot(cr, w_exp, axes=(2, 0)).squeeze()  # 34530 x 50, apply expression
         pt3d_predict = np.tensordot(pt3d_predict, w_id, axes=(1, 0)).reshape(-1, 3).T   # 3 x 11510, apply shape
 
         # pt3d_predict = f * np.tensordot(rot, pt3d_predict, axes=(1,0)).T  # 11510 x 3, apply pose
         pt3d_predict = f * np.dot(rot, pt3d_predict).T + np.tile(np.reshape(t3d, (1, -1)), (pt3d_predict.shape[1], 1))
-        print(pt3d_predict[:6,:])
 
 
-
-        # print(f'-------[case {i}]---------')
-        # print(pic_names[i])
-        # print('f ', f)
-        # print('rot ', rot)
-        # print('t3d ', t3d)
-        # print('w_id ', w_id)
-        # print('w_exp ', w_exp)
-        # predicted = np.tensordot(cr, w_exp, axes=(2, 0)).squeeze()
-        # assert predicted.shape == (34530, 50)
-        # predicted = np.dot(predicted, w_id).reshape(-1, 3)
-        # test_num = np.sum(predicted[:, 2] > 0)
-        # print('The face vertices number is :', test_num)
+        # 3. draw mesh, borrow code from: https://github.com/cleardusk/3DDFA
+        index = np.where(pt3d_predict[:, 2] > -10)[0]  # front face vertices
+        visualize(pt3d_predict, faces_load - 1, index, pic_names[i])
 
 
-        # TODO: draw mesh. Have found a demo on Github: https://github.com/cleardusk/3DDFA
-        index = np.where(pt3d_predict[:, 2] > -10)[0]
-        vertices = pt3d_predict[index, :]
-        print('number of vertices:', len(index))
-
-
-        # np.save('vertices', vertices)
-        # np.save('faces', faces_load)
-
-        break
-
-
-# out.release()
