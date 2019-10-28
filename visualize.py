@@ -73,7 +73,6 @@ def visualize(pt3d, faces, index, pic_name, path='render_res'):
 
 
 if __name__ == "__main__":
-    # TODO: this case will cause render failure.
     vertices = np.load('/Users/momo/Desktop/face_model/vertices.npy')  # m x 3
     faces = np.load('/Users/momo/Desktop/face_model/faces.npy') - 1  # N x 3
     index = np.load('/Users/momo/Desktop/face_model/index.npy')

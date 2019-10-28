@@ -7,7 +7,8 @@ def pic2video(pic_path, video_path=None):
     if video_path is None:
         video_path = pic_path
 
-    fps = sorted(glob(osp.join(pic_path, '*.jpg')))
+    # fps = sorted(glob(osp.join(pic_path, '*.jpg')))
+    fps = sorted(glob(osp.join(pic_path, '*.jpeg')))
 
     imgs = []
     for fp in fps:

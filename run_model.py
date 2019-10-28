@@ -38,8 +38,10 @@ if args["camera"]:
     frame = vs.read()
     height, width, nchannels = frame.shape
 else:
-    root_path = '../face_test/probes'
-    pic_names = sorted(glob.glob(os.path.join(root_path, '*.jpg')))
+    # root_path = '../face_test/probes'
+    root_path = '/Users/momo/Desktop/test_frames/test_video_frames'
+    # pic_names = sorted(glob.glob(os.path.join(root_path, '*.jpg')))
+    pic_names = sorted(glob.glob(os.path.join(root_path, '*.jpeg')))
     pt_names = sorted(glob.glob(os.path.join(root_path, '*lds87.txt')))
     print(f'[Counted] Total pic number is {len(pic_names)}')
 
@@ -65,9 +67,11 @@ else:
         # print(pic_names[i])
 
         print(f'[Processing] pic number {i+1}...')
-        points = np.loadtxt(pt_names[i], delimiter=',')  # 87 x 2
+        # points = np.loadtxt(pt_names[i], delimiter=',')  # 87 x 2
+        points = np.loadtxt(pt_names[i])  # 87 x 2
 
-        points[:, 1] = height + 1 - points[:, 1]
+
+        points[:, 1] = height + 1 - points[:, 1]  # reverse for historical reason.
 
         # 1. learn identity and expression coefficients
         f, rot, t3d, w_id, w_exp = fitting_model(points, cr, single_value, indices, w_id_initial,

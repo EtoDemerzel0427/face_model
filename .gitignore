@@ -6,6 +6,7 @@ MAT
 *.npz
 *.npy
 *.jpg
+*.jpeg
 
 # not include config files
 .idea
